@@ -1,5 +1,5 @@
 from panda import Panda
-from opendbc.car import get_safety_config, structs
+from opendbc.car import Bus, get_safety_config, structs
 from opendbc.car.hyundai.hyundaicanfd import CanBus
 from opendbc.car.hyundai.values import (HyundaiFlags, CAR, DBC, CAMERA_SCC_CAR, CANFD_RADAR_SCC_CAR,
                                         CANFD_UNSUPPORTED_LONGITUDINAL_CAR, UNSUPPORTED_LONGITUDINAL_CAR, Buttons,
@@ -46,7 +46,6 @@ class CarInterface(CarInterfaceBase):
       if {0x1AA, 0x1CF} & set(fingerprint[CAN.ECAN]):
         ret.exFlags |= HyundaiExFlags.LFA.value
 
-      ret.radarUnavailable = RADAR_START_ADDR not in fingerprint[1] or DBC[ret.carFingerprint]["radar"] is None
       ret.experimentalLongitudinalAvailable = candidate not in (CANFD_UNSUPPORTED_LONGITUDINAL_CAR | CANFD_RADAR_SCC_CAR)
       ret.pcmCruise = not ret.openpilotLongitudinalControl
 
@@ -116,8 +115,7 @@ class CarInterface(CarInterfaceBase):
       else:
         ret.radarTimeStep = (1.0 / 20)  # 20Hz  RadarTrack 20Hz
 
-      ret.radarUnavailable = ret.sccBus == -1
-      ret.experimentalLongitudinalAvailable = not ret.radarUnavailable
+      ret.experimentalLongitudinalAvailable = candidate not in (UNSUPPORTED_LONGITUDINAL_CAR | CAMERA_SCC_CAR)
 
       if ret.openpilotLongitudinalControl and ret.sccBus == 0:
         ret.pcmCruise = False
@@ -156,6 +154,7 @@ class CarInterface(CarInterfaceBase):
 
     # Common longitudinal control setup
 
+    ret.radarUnavailable = RADAR_START_ADDR not in fingerprint[1] or Bus.radar not in DBC[ret.carFingerprint]
     ret.openpilotLongitudinalControl = experimental_long and ret.experimentalLongitudinalAvailable
     ret.startingState = True
     ret.vEgoStarting = 0.3

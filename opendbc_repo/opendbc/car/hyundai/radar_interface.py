@@ -1,7 +1,7 @@
 import math
 
 from opendbc.can.parser import CANParser
-from opendbc.car import structs
+from opendbc.car import Bus, structs
 from opendbc.car.interfaces import RadarInterfaceBase
 from opendbc.car.hyundai.values import DBC, CANFD_CAR
 
@@ -16,12 +16,12 @@ RADAR_MSG_COUNT = 32
 def get_radar_can_parser(CP):
   radar_tracks_enable = Params().get_bool("RadarTrackEnable")
 
-  if DBC[CP.carFingerprint]['radar'] is None or not radar_tracks_enable:
+  if Bus.radar not in DBC[CP.carFingerprint] or not radar_tracks_enable:
     return None
 
   print("\nRadarInterface: RadarTracks...\n")
   messages = [(f"RADAR_TRACK_{addr:x}", 50) for addr in range(RADAR_START_ADDR, RADAR_START_ADDR + RADAR_MSG_COUNT)]
-  return CANParser(DBC[CP.carFingerprint]['radar'], messages, 1)
+  return CANParser(DBC[CP.carFingerprint][Bus.radar], messages, 1)
 
 def get_radar_can_parser_scc(CP):
   scc2 = Params().get_bool("SccOnBus2")
@@ -30,7 +30,7 @@ def get_radar_can_parser_scc(CP):
     return None
   print("\nRadarInterface: SCC Radar (Bus{})\n".format(2 if scc2 else 0))
   messages = [("SCC11", 50)]
-  return CANParser(DBC[CP.carFingerprint]['pt'], messages, 2 if scc2 else 0)
+  return CANParser(DBC[CP.carFingerprint][Bus.pt], messages, 2 if scc2 else 0)
 
 class RadarInterface(RadarInterfaceBase):
   def __init__(self, CP):
