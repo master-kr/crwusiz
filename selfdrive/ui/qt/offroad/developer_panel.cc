@@ -1,4 +1,6 @@
 #include <QDebug>
+#include <QProcess>
+#include <cstdlib>
 
 #include "selfdrive/ui/qt/offroad/developer_panel.h"
 #include "selfdrive/ui/qt/widgets/ssh_keys.h"
@@ -24,6 +26,16 @@ DeveloperPanel::DeveloperPanel(SettingsWindow *parent) : ListWidget(parent) {
   });
   addItem(longManeuverToggle);
 
+  adbToggle = new ParamControl("Adb", tr("Android Debug Bridge"), tr("Enable ADB"), "");
+  QObject::connect(adbToggle, &ParamControl::toggleFlipped, [=](bool state) {
+    if (state) {
+      QProcess::startDetached("sh", {"-c", "setprop service.adb.tcp.port 5555 && sudo systemctl start adbd"});
+    } else {
+      QProcess::startDetached("sh", {"-c", "sudo systemctl stop adbd"});
+    }
+  });
+  addItem(adbToggle);
+
   // Joystick and longitudinal maneuvers should be hidden on release branches
   is_release = params.getBool("IsReleaseBranch");
 
@@ -47,6 +59,7 @@ void DeveloperPanel::updateToggles(bool _offroad) {
   } else {
     longManeuverToggle->setEnabled(false);
   }
+  adbToggle->setEnabled(_offroad);
 
   offroad = _offroad;
 }

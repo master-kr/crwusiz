@@ -369,6 +369,14 @@
         <source>Longitudinal Maneuver Mode</source>
         <translation>롱컨 기동 모드</translation>
     </message>
+    <message>
+        <source>ADB over TCP</source>
+        <translation>ADB over TCP</translation>
+    </message>
+    <message>
+        <source>Enable ADB over TCP on port 5555</source>
+        <translation>Enable ADB over TCP on port 5555</translation>
+    </message>
 </context>
 <context>
     <name>DevicePanel</name>
