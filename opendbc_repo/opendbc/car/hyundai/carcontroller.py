@@ -85,7 +85,7 @@ class CarController(CarControllerBase):
     # CS.out.steeringPressed and steeringTorque are based on the
     # STEERING_COL_TORQUE value
 
-    max_torque = 240
+    max_torque = 200
     # Interpolate a percent to apply to max torque based on vEgo value, which is
     # the "best estimate of speed".  This means that under 20 (units?) we will
     # apply less torque, and over 20 we will apply the full calculated torque.
