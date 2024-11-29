@@ -111,9 +111,6 @@ class CarInterface(CarInterfaceBase):
           ret.exFlags |= HyundaiExFlags.SCC13.value
         if any(0x389 in fingerprint[i] for i in [0, 2]):
           ret.exFlags|=  HyundaiExFlags.SCC14.value
-        ret.radarTimeStep = (1.0 / 50)  # 50Hz   SCC11, RadarTrack은 50Hz
-      else:
-        ret.radarTimeStep = (1.0 / 20)  # 20Hz  RadarTrack 20Hz
 
       ret.experimentalLongitudinalAvailable = candidate not in (UNSUPPORTED_LONGITUDINAL_CAR | CAMERA_SCC_CAR)
 
