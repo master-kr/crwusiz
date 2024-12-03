@@ -44,6 +44,12 @@ void OnroadWindow::updateState(const UIState &s) {
     return;
   }
 
+  const QString file_path = "/data/tmux_error.log";
+  if (QFile::exists(file_path)) {
+    const std::string txt = util::read_file(file_path.toStdString());
+    RichTextDialog::alert(QString::fromStdString(txt), this);
+  }
+
   alerts->updateState(s);
   nvg->updateState(s);
 

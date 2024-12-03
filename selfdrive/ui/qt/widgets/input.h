@@ -61,6 +61,15 @@ public:
   static bool rich(const QString &prompt_text, QWidget *parent);
 };
 
+// larger ConfirmationDialog for rich text
+class RichTextDialog : public DialogBase {
+  Q_OBJECT
+
+public:
+  explicit RichTextDialog(const QString &prompt_text, const QString &btn_text, QWidget* parent);
+  static bool alert(const QString &prompt_text, QWidget *parent);
+};
+
 class MultiOptionDialog : public DialogBase {
   Q_OBJECT
 

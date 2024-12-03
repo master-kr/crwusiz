@@ -2,6 +2,7 @@
 
 #include "selfdrive/ui/qt/onroad/alerts.h"
 #include "selfdrive/ui/qt/onroad/annotated_camera.h"
+#include "selfdrive/ui/qt/widgets/input.h"
 
 class OnroadWindow : public QWidget {
   Q_OBJECT
