@@ -275,7 +275,7 @@ class CarController(CarControllerBase):
           if self.CP.flags & HyundaiFlags.CANFD_ALT_BUTTONS:
             if CS.canfd_buttons:
               for _ in range(20):
-                can_sends.append(hyundaicanfd.create_buttons_can_fd_alt(self.packer, self.CP, self.CAN, Buttons.RES_ACCEL, CS.canfd_buttons))
+                can_sends.append(hyundaicanfd.create_buttons_canfd_alt(self.packer, self.CP, self.CAN, Buttons.RES_ACCEL, CS.canfd_buttons))
               self.last_button_frame = self.frame
           else:
             for _ in range(20):
